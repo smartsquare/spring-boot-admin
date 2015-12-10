@@ -1,9 +1,5 @@
 package de.codecentric.boot.admin.notify;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import de.codecentric.boot.admin.config.SlackSettings;
-import de.codecentric.boot.admin.event.ClientApplicationStatusChangedEvent;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ParserContext;
@@ -12,21 +8,26 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.codecentric.boot.admin.event.ClientApplicationStatusChangedEvent;
+
 /**
- * @author Lukas Taake
- *         Created on 10.12.15.
+ * @author Lukas Taake Created on 10.12.15.
  */
 public class SlackNotifier
-        extends AbstractNotifier {
+    extends AbstractNotifier {
 
     private final static String DEFAULT_TEXT =
-            "#{application.name} (#{application.id})\nstatus changed from *#{from.status}* to *#{to.status}*\n\n#{application.healthUrl}";
+        "#{application.name} (#{application.id})\nstatus changed from *#{from.status}* to *#{to.status}*\n\n#{application.healthUrl}";
 
     private static final String SLACK_MSG = "https://slack.com/api/chat.postMessage";
 
-    private final RestTemplate template;
+    private String token;
 
-    private final SlackSettings settings;
+    private String channel;
+
+    private final RestTemplate template;
 
     private final SpelExpressionParser spelExpressionParser;
 
@@ -34,9 +35,8 @@ public class SlackNotifier
 
     private final ObjectMapper jsonParser;
 
-    public SlackNotifier( SlackSettings settings, RestTemplate template, SpelExpressionParser spelExpressionParser,
+    public SlackNotifier( RestTemplate template, SpelExpressionParser spelExpressionParser,
                           ObjectMapper jsonParser ) {
-        this.settings = settings;
         this.template = template;
         this.spelExpressionParser = spelExpressionParser;
         this.jsonParser = jsonParser;
@@ -46,10 +46,10 @@ public class SlackNotifier
 
     @Override
     protected void notify( final ClientApplicationStatusChangedEvent event )
-            throws Exception {
+        throws Exception {
         EvaluationContext context = new StandardEvaluationContext( event );
-        StringBuilder requestParams = new StringBuilder( "?token=" + settings.getToken() );
-        requestParams.append( "&channel=" + settings.getChannel() );
+        StringBuilder requestParams = new StringBuilder( "?token=" + token );
+        requestParams.append( "&channel=" + channel );
         requestParams.append( "&text=" );
         requestParams.append( text.getValue( context, String.class ) );
 
@@ -60,5 +60,21 @@ public class SlackNotifier
         if ( !jsonNode.get( "ok" ).asBoolean() ) {
             throw new SlackException( jsonNode.get( "error" ).asText() );
         }
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken( String token ) {
+        this.token = token;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel( String channel ) {
+        this.channel = channel;
     }
 }

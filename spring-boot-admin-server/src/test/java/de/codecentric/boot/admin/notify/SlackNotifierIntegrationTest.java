@@ -5,6 +5,7 @@ import de.codecentric.boot.admin.event.ClientApplicationStatusChangedEvent;
 import de.codecentric.boot.admin.model.Application;
 import de.codecentric.boot.admin.model.StatusInfo;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @WebIntegrationTest( { "server.port=0", "spring.cloud.config.enabled=false" } )
 @TestPropertySource( properties = { "spring.boot.admin.notify.slack.token=TEST_TOKEN",
         "spring.boot.admin.notify.slack.channel=C03713LCG" } )
+@Ignore
 public class SlackNotifierIntegrationTest {
 
     @Autowired

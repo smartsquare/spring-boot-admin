@@ -18,6 +18,7 @@ package de.codecentric.boot.admin.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.codecentric.boot.admin.notify.SlackNotifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -28,7 +29,8 @@ public class SlackNotifierConfiguration {
 
     @Bean
     @ConditionalOnProperty( prefix = "spring.boot.admin.notify.slack", name = "enabled", matchIfMissing = true )
-    public SlackNotifier slackNotifier( SlackSettings settings ) {
-        return new SlackNotifier( settings, new RestTemplate(), new SpelExpressionParser(), new ObjectMapper() );
+    @ConfigurationProperties("spring.boot.admin.notify.slack")
+    public SlackNotifier slackNotifier( ) {
+        return new SlackNotifier( new RestTemplate(), new SpelExpressionParser(), new ObjectMapper() );
     }
 }

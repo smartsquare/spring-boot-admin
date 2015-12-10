@@ -25,18 +25,17 @@ import org.springframework.core.type.AnnotationMetadata;
  * @author Johannes Edmeier
  */
 public class AdminServerImportSelector
-        implements DeferredImportSelector {
+    implements DeferredImportSelector {
 
     @Override
     public String[] selectImports( AnnotationMetadata importingClassMetadata ) {
         return new String[] { MailNotifierConfiguration.class.getCanonicalName(),
-                HazelcastStoreConfiguration.class.getCanonicalName(),
-                AdminServerWebConfiguration.class.getCanonicalName(),
-                DiscoveryClientConfiguration.class.getCanonicalName(),
-                RevereseZuulProxyConfiguration.class.getCanonicalName(),
-                PagerdutyNotifierConfiguration.class.getCanonicalName(),
-                SlackSettings.class.getCanonicalName(),
-                SlackNotifierConfiguration.class.getCanonicalName() };
+            HazelcastStoreConfiguration.class.getCanonicalName(),
+            AdminServerWebConfiguration.class.getCanonicalName(),
+            DiscoveryClientConfiguration.class.getCanonicalName(),
+            RevereseZuulProxyConfiguration.class.getCanonicalName(),
+            PagerdutyNotifierConfiguration.class.getCanonicalName(),
+            SlackNotifierConfiguration.class.getCanonicalName() };
     }
 
 }
