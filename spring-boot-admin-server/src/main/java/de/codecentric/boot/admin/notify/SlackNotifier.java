@@ -1,5 +1,6 @@
 package de.codecentric.boot.admin.notify;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.codecentric.boot.admin.config.SlackSettings;
 import de.codecentric.boot.admin.event.ClientApplicationStatusChangedEvent;
@@ -53,5 +54,11 @@ public class SlackNotifier
         requestParams.append( text.getValue( context, String.class ) );
 
         ResponseEntity<String> response = template.getForEntity( SLACK_MSG + requestParams, String.class );
+
+        JsonNode jsonNode = jsonParser.readTree( response.getBody() );
+
+        if ( !jsonNode.get( "ok" ).asBoolean() ) {
+            throw new SlackException( jsonNode.get( "error" ).asText() );
+        }
     }
 }
