@@ -1,5 +1,8 @@
 package de.codecentric.boot.admin.notify;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.codecentric.boot.admin.event.ClientApplicationStatusChangedEvent;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ParserContext;
@@ -8,9 +11,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import de.codecentric.boot.admin.event.ClientApplicationStatusChangedEvent;
+import java.util.Map;
 
 /**
  * @author Lukas Taake Created on 10.12.15.
@@ -26,6 +27,10 @@ public class SlackNotifier
     private String token;
 
     private String channel;
+
+    private String username;
+
+    private Map<String, String> icons;
 
     private final RestTemplate template;
 
@@ -49,9 +54,15 @@ public class SlackNotifier
         throws Exception {
         EvaluationContext context = new StandardEvaluationContext( event );
         StringBuilder requestParams = new StringBuilder( "?token=" + token );
-        requestParams.append( "&channel=" + channel );
-        requestParams.append( "&text=" );
-        requestParams.append( text.getValue( context, String.class ) );
+        requestParams.append( "&channel=" ).append( channel );
+        requestParams.append( "&text=" ).append( text.getValue( context, String.class ) );
+        requestParams.append( "&username=" ).append( username );
+
+        // check for emoji_icon mapping for new status
+        String newStatus = event.getTo().getStatus();
+        if ( icons != null && icons.containsKey( newStatus ) ) {
+            requestParams.append( "&icon_emoji=" ).append( icons.get( newStatus ) );
+        }
 
         ResponseEntity<String> response = template.getForEntity( SLACK_MSG + requestParams, String.class );
 
@@ -76,5 +87,21 @@ public class SlackNotifier
 
     public void setChannel( String channel ) {
         this.channel = channel;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername( String username ) {
+        this.username = username;
+    }
+
+    public Map<String, String> getIcons() {
+        return icons;
+    }
+
+    public void setIcons( Map<String, String> icons ) {
+        this.icons = icons;
     }
 }

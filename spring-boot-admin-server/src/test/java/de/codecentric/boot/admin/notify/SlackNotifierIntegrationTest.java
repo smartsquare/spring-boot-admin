@@ -26,6 +26,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @WebIntegrationTest( { "server.port=0", "spring.cloud.config.enabled=false" } )
 @TestPropertySource( properties = { "spring.boot.admin.notify.slack.token=TEST_TOKEN",
         "spring.boot.admin.notify.slack.channel=C03713LCG" } )
+
 @Ignore
 public class SlackNotifierIntegrationTest {
 
