@@ -28,7 +28,9 @@ public class SlackNotifier
 
     private String channel;
 
-    private String username;
+    private String username = "Spring Boot Admin";
+
+    private String defaultIcon = ":cop:";
 
     private Map<String, String> icons;
 
@@ -55,8 +57,9 @@ public class SlackNotifier
         EvaluationContext context = new StandardEvaluationContext( event );
         StringBuilder requestParams = new StringBuilder( "?token=" + token );
         requestParams.append( "&channel=" ).append( channel );
-        requestParams.append( "&text=" ).append( text.getValue( context, String.class ) );
         requestParams.append( "&username=" ).append( username );
+        requestParams.append( "&icon_emoji=" ).append( defaultIcon );
+        requestParams.append( "&text=" ).append( text.getValue( context, String.class ) );
 
         // check for emoji_icon mapping for new status
         String newStatus = event.getTo().getStatus();
@@ -103,5 +106,13 @@ public class SlackNotifier
 
     public void setIcons( Map<String, String> icons ) {
         this.icons = icons;
+    }
+
+    public String getDefaultIcon() {
+        return defaultIcon;
+    }
+
+    public void setDefaultIcon(String defaultIcon) {
+        this.defaultIcon = defaultIcon;
     }
 }
