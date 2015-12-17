@@ -28,7 +28,7 @@ import org.springframework.web.client.RestTemplate;
 public class SlackNotifierConfiguration {
 
     @Bean
-    @ConditionalOnProperty( prefix = "spring.boot.admin.notify.slack", name = "enabled", matchIfMissing = true )
+    @ConditionalOnProperty( prefix = "spring.boot.admin.notify.slack", name = "enabled" )
     @ConfigurationProperties("spring.boot.admin.notify.slack")
     public SlackNotifier slackNotifier( ) {
         return new SlackNotifier( new RestTemplate(), new SpelExpressionParser(), new ObjectMapper() );
