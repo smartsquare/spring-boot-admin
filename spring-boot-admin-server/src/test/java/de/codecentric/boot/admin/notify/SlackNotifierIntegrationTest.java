@@ -25,9 +25,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @SpringApplicationConfiguration( classes = SlackNotifierIntegrationTest.TestAdminApplication.class )
 @WebIntegrationTest( { "server.port=0", "spring.cloud.config.enabled=false" } )
 @TestPropertySource( properties = { "spring.boot.admin.notify.slack.token=TEST_TOKEN",
-        "spring.boot.admin.notify.slack.channel=C03713LCG" } )
+        "spring.boot.admin.notify.slack.channel=CHANNEL" } )
 
-@Ignore
 public class SlackNotifierIntegrationTest {
 
     @Autowired
@@ -41,6 +40,7 @@ public class SlackNotifierIntegrationTest {
     }
 
     @Test
+    @Ignore
     public void test() {
         notifier.onClientApplicationStatusChanged( new ClientApplicationStatusChangedEvent(
                 Application.create( "App" ).withId( "-id-" ).withHealthUrl( "http://health" ).build(),
