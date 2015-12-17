@@ -397,6 +397,41 @@ To enable pagerduty notifications you just have to add a generic service to your
 |
 |===
 
+
+[[slack-notifications]]
+=== Slack chat notifications ===
+To enable slack notifications you have to set `spring.boot.admin.notify.slack.enabled`, the API token and the channel.
+
+.Slack notifications configuration options
+|===
+| Property name |Description |Default value
+
+| spring.boot.admin.notify.slack.enabled
+| Enable slack notifications
+| `false`
+
+| spring.boot.admin.notify.slack.token
+| The slack API token that should be used.
+|
+
+| spring.boot.admin.notify.slack.channel
+| The channel to which the notifications should be posted.
+|
+
+| spring.boot.admin.notify.slack.username
+| The username as which the notifications should be posted.
+| `Spring Boot Admin`
+
+| spring.boot.admin.notify.slack.default-icon
+| The emoji that should be used for all notifications
+| `:cop:`
+
+| spring.boot.admin.notify.slack.icons.<STATUS>
+| The emoji that should be used for a given <STATUS>. E.g. spring.boot.admin.notify.slack.icons.OFFLINE=:goberserk:
+|
+
+|===
+
 [[faqs]]
 == FAQs ==
 [qanda]
